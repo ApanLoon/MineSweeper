@@ -13,7 +13,7 @@ public class MineFieldController : MonoBehaviour
         GameEventManager.Instance.OnMineFieldCreated += OnMineFieldCreated;
     }
 
-    protected void OnMineFieldCreated(MineField mineField)
+    protected void OnMineFieldCreated (MineField mineField)
     {
         if (SectorControllers != null)
         {
@@ -48,8 +48,6 @@ public class MineFieldController : MonoBehaviour
                 }
             }
         }
-
-        SectorControllers = null;
     }
 
     protected void DestroyMineField()
@@ -62,7 +60,7 @@ public class MineFieldController : MonoBehaviour
                 {
                     if (SectorControllers[x, y, z] != null)
                     {
-                        Destroy(SectorControllers[x, y, z].gameObject);
+                        GameObject.Destroy (SectorControllers[x, y, z].gameObject);
                     }
                 }
             }

@@ -1,22 +1,42 @@
 ﻿
+using UnityEngine;
+
 public class MineField
 {
-    protected Sector[,,] Sectors;
+    public int SectorsPerEdge { get; protected set; }
+    public int MineCount { get; protected set; }
 
-    public MineField(int size)
+    public Sector[,,] Sectors { get; protected set; }
+
+    public MineField (int sectorsPerEdge, int mineCount)
     {
-        Sectors = new Sector[size, size, size];
-        for (int z = 0; z < size; z++)
-        {
-            for (int y = 0; y < size; y++)
-            {
-                for (int x = 0; x < size; x++)
-                {
-                    Sector sector = new Sector();
+        SectorsPerEdge = sectorsPerEdge;
+        Sectors = new Sector[sectorsPerEdge, sectorsPerEdge, sectorsPerEdge];
+        MineCount = mineCount;
 
+        for (int z = 0; z < sectorsPerEdge; z++)
+        {
+            for (int y = 0; y < sectorsPerEdge; y++)
+            {
+                for (int x = 0; x < sectorsPerEdge; x++)
+                {
+                    Sector sector = new Sector(new Vector3Int (x, y, z));
                     Sectors[x, y, z] = sector;
                 }
             }
         }
+
+        for (int i = 0; i < MineCount; i++)
+        {
+            Sector sector;
+            do
+            {
+                sector = Sectors[Random.Range(0, sectorsPerEdge), Random.Range(0, sectorsPerEdge), Random.Range(0, sectorsPerEdge)];
+            } while (sector.HasMine);
+
+            sector.HasMine = true;
+        }
+
+        GameEventManager.Instance.RaiseOnMineFieldCreated (this);
     }
 }
